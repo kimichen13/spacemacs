@@ -14,6 +14,7 @@
         evil-args
         evil-cleverparens
         evil-ediff
+        evil-escape
         evil-exchange
         evil-iedit-state
         evil-indent-plus
@@ -34,6 +35,7 @@
         evil-tutor
         (evil-unimpaired :location (recipe :fetcher local))
         evil-visual-mark-mode
+        evil-visualstar
         (hs-minor-mode :location built-in)
         linum-relative
         vi-tilde-fringe
@@ -91,6 +93,13 @@
   (use-package evil-ediff
     :after (ediff)
     :if (memq dotspacemacs-editing-style '(hybrid vim))))
+
+(defun spacemacs-evil/init-evil-escape ()
+  (use-package evil-escape
+    :init (progn
+            (spacemacs|hide-lighter evil-escape-mode)
+            (spacemacs//evil-escape-deactivate-in-holy-mode dotspacemacs-editing-style)
+            (add-hook 'spacemacs-editing-style-hook #'spacemacs//evil-escape-deactivate-in-holy-mode))))
 
 (defun spacemacs-evil/init-evil-exchange ()
   (use-package evil-exchange
@@ -284,6 +293,17 @@
       :mode evil-visual-mark-mode
       :documentation "Enable evil visual marks mode."
       :evil-leader "t`")))
+
+(defun spacemacs-evil/init-evil-visualstar ()
+  (use-package evil-visualstar
+    :commands (evil-visualstar/begin-search-forward
+               evil-visualstar/begin-search-backward)
+    :init
+    (progn
+      (define-key evil-visual-state-map (kbd "*")
+        'evil-visualstar/begin-search-forward)
+      (define-key evil-visual-state-map (kbd "#")
+        'evil-visualstar/begin-search-backward))))
 
 (defun spacemacs-evil/init-hs-minor-mode ()
   (add-hook 'prog-mode-hook 'spacemacs//enable-hs-minor-mode))

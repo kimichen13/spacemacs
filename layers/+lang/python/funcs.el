@@ -40,7 +40,9 @@
   "Setup anaconda auto-completion."
   (spacemacs|add-company-backends
     :backends company-anaconda
-    :modes python-mode)
+    :modes python-mode
+    :append-hooks nil
+    :call-hooks t)
   (company-mode))
 
 (defun spacemacs//python-setup-anaconda-eldoc ()
@@ -70,7 +72,7 @@ when this mode is enabled since the minibuffer is cleared all the time."
       (progn
         (require 'lsp-python)
         (lsp-python-enable))
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dofile.")))
+    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
 
 (defun spacemacs//python-setup-lsp-company ()
   "Setup lsp auto-completion."
@@ -78,9 +80,11 @@ when this mode is enabled since the minibuffer is cleared all the time."
       (progn
         (spacemacs|add-company-backends
           :backends company-lsp
-          :modes python-mode)
+          :modes python-mode
+          :append-hooks nil
+          :call-hooks t)
         (company-mode))
-    (message "`lsp' layer is not installed, please add `lsp' layer to your dofile.")))
+    (message "`lsp' layer is not installed, please add `lsp' layer to your dotfile.")))
 
 
 ;; others
@@ -104,7 +108,8 @@ when this mode is enabled since the minibuffer is cleared all the time."
   "Highlight break point lines."
   (interactive)
   (highlight-lines-matching-regexp "import \\(pdb\\|ipdb\\|pudb\\|wdb\\)")
-  (highlight-lines-matching-regexp "\\(pdb\\|ipdb\\|pudb\\|wdb\\).set_trace()"))
+  (highlight-lines-matching-regexp "\\(pdb\\|ipdb\\|pudb\\|wdb\\).set_trace()")
+  (highlight-lines-matching-regexp "trepan.api.debug()"))
 
 (defun spacemacs/pyenv-executable-find (command)
   "Find executable taking pyenv shims into account.
@@ -130,10 +135,6 @@ as the pyenv version then also return nil. This works around https://github.com/
       (setq python-shell-interpreter-args "-i")
       (setq python-shell-interpreter "python"))))
 
-(defun spacemacs//python-setup-hy (&rest args)
-  (setq hy-mode-inferior-lisp-command
-        (concat (or (spacemacs/pyenv-executable-find "hy") "hy")
-                " --spy")))
 
 (defun spacemacs//python-setup-checkers (&rest args)
   (when (fboundp 'flycheck-set-checker-executable)
@@ -146,13 +147,13 @@ as the pyenv version then also return nil. This works around https://github.com/
 
 (defun spacemacs/python-setup-everything (&rest args)
   (apply 'spacemacs//python-setup-shell args)
-  (apply 'spacemacs//python-setup-hy args)
   (apply 'spacemacs//python-setup-checkers args))
 
 (defun spacemacs/python-toggle-breakpoint ()
   "Add a break point, highlight it."
   (interactive)
-  (let ((trace (cond ((spacemacs/pyenv-executable-find "wdb") "import wdb; wdb.set_trace()")
+  (let ((trace (cond ((spacemacs/pyenv-executable-find "trepan3k") "import trepan.api; trepan.api.debug()")
+                     ((spacemacs/pyenv-executable-find "wdb") "import wdb; wdb.set_trace()")
                      ((spacemacs/pyenv-executable-find "ipdb") "import ipdb; ipdb.set_trace()")
                      ((spacemacs/pyenv-executable-find "pudb") "import pudb; pudb.set_trace()")
                      ((spacemacs/pyenv-executable-find "ipdb3") "import ipdb; ipdb.set_trace()")
@@ -251,6 +252,11 @@ to be called for each testrunner. "
       (user-error "This test function is not available with the `%S' runner."
                   test-runner))))
 
+(defun spacemacs/python-test-last (arg)
+  "Re-run the last test command"
+  (interactive "P")
+  (spacemacs//python-call-correct-test-function arg '((nose . nosetests-again))))
+
 (defun spacemacs/python-test-all (arg)
   "Run all tests."
   (interactive "P")
@@ -307,6 +313,7 @@ to be called for each testrunner. "
     "ta" 'spacemacs/python-test-all
     "tB" 'spacemacs/python-test-pdb-module
     "tb" 'spacemacs/python-test-module
+    "tl" 'spacemacs/python-test-last
     "tT" 'spacemacs/python-test-pdb-one
     "tt" 'spacemacs/python-test-one
     "tM" 'spacemacs/python-test-pdb-module
@@ -397,4 +404,3 @@ to be called for each testrunner. "
 (when (version< emacs-version "25")
   (advice-add 'wisent-python-default-setup :after
               #'spacemacs//python-imenu-create-index-use-semantic-maybe))
-

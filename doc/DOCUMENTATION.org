@@ -190,6 +190,7 @@
 - [[#emacs-server][Emacs Server]]
   - [[#connecting-to-the-emacs-server][Connecting to the Emacs server]]
   - [[#keeping-the-server-alive][Keeping the server alive]]
+  - [[#disabling-the-emacs-server][Disabling the Emacs server]]
 - [[#troubleshoot][Troubleshoot]]
   - [[#loading-fails][Loading fails]]
   - [[#upgradingdowngrading-emacs-version][Upgrading/Downgrading Emacs version]]
@@ -2066,6 +2067,10 @@ Windows manipulation commands (start with ~w~):
 | ~SPC w =~              | balance split windows                                                       |
 | ~SPC w _~              | maximize window horizontally                                                |
 | ~SPC w \vert~          | maximize window vertically                                                  |
+| ~SPC w 1~              | make 1 window layout                                                        |
+| ~SPC w 2~              | make 2 windows layout (split vertically)                                    |
+| ~SPC w 3~              | make 3 windows layout (split vertically)                                    |
+| ~SPC w 4~              | make 4 windows layout (split in 2x2 grid)                                   |
 | ~SPC w b~              | force the focus back to the minibuffer                                      |
 | ~SPC w c~              | maximize/minimize a window and center it                                    |
 | ~SPC w C~              | maximize/minimize a window and center it using [[https://github.com/abo-abo/ace-window][ace-window]]                   |
@@ -3276,6 +3281,14 @@ server is to use the following bindings:
 | ~SPC q t~  | Restart Emacs and debug with --with-timed-requires                       |
 | ~SPC q T~  | Restart Emacs and debug with --adv-timers                                |
 
+** Disabling the Emacs server
+You can disable the built-in server by setting the variable
+=dotspacemacs-enable-server= to =nil= in your =~/.spacemacs=.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default dotspacemacs-enable-server nil)
+#+END_SRC
+
 * Troubleshoot
 ** Loading fails
 If any errors happen during the loading the mode-line will turn red and the
@@ -3329,30 +3342,31 @@ with ~SPC SPC spacemacs/recompile-elpa~.
 
 ** Stars, forks and watchers
 
-| Achievements         | Account         |
-|----------------------+-----------------|
-| 100th watcher        | [[https://github.com/adouzzy][adouzzy]]         |
-| 100th fork           | [[https://github.com/balajisivaraman][balajisivaraman]] |
-| 200th fork           | [[https://github.com/alcol80][alcol80]]         |
-| 300th fork           | [[https://github.com/mlopes][mlopes]]          |
-| 2000th fork          | [[https://github.com/Gameguykiler][Gameguykiler]]    |
-| 100th star           | [[https://github.com/Jackneill][Jackneill]]       |
-| 200th star           | [[https://github.com/jb55][jb55]]            |
-| 400th star           | [[https://github.com/dbohdan][dbohdan]]         |
-| 600th star           | [[https://github.com/laat][laat]]            |
-| 700th star           | [[https://github.com/kendall][kendall]]         |
-| 800th star           | [[https://github.com/urso][urso]]            |
-| 900th star           | [[https://github.com/luisgerhorst][luisgerhorst]]    |
-| 1000th star!         | [[https://github.com/rashly][rashly]]          |
-| 2000th star!!        | [[https://github.com/stshine][stshine]]         |
-| 3000th star!!!       | [[https://github.com/TheBB][TheBB]]           |
-| 4000th star!!!!      | [[https://github.com/nixmaniack][nixmaniack]]      |
-| 5000th star!!!!!     | [[https://github.com/StreakyCobra][StreakyCobra]]    |
-| 6000th star!!!!!!    | [[https://github.com/NJBS][NJBS]]            |
-| 7000th star!!!!!!!   | [[https://github.com/mukhali][mukhali]]         |
-| 8000th star!!!!!!!!  | [[https://github.com/shsteven][shsteven]]        |
-| 9000th star!!!!!!!!! | [[https://github.com/deb0ch][deb0ch]]          |
-| 10000th star :star:  | [[https://github.com/colt365][colt365]]         |
+| Achievements               | Account         |
+|----------------------------+-----------------|
+| 100th watcher              | [[https://github.com/adouzzy][adouzzy]]         |
+| 100th fork                 | [[https://github.com/balajisivaraman][balajisivaraman]] |
+| 200th fork                 | [[https://github.com/alcol80][alcol80]]         |
+| 300th fork                 | [[https://github.com/mlopes][mlopes]]          |
+| 2000th fork                | [[https://github.com/Gameguykiler][Gameguykiler]]    |
+| 100th star                 | [[https://github.com/Jackneill][Jackneill]]       |
+| 200th star                 | [[https://github.com/jb55][jb55]]            |
+| 400th star                 | [[https://github.com/dbohdan][dbohdan]]         |
+| 600th star                 | [[https://github.com/laat][laat]]            |
+| 700th star                 | [[https://github.com/kendall][kendall]]         |
+| 800th star                 | [[https://github.com/urso][urso]]            |
+| 900th star                 | [[https://github.com/luisgerhorst][luisgerhorst]]    |
+| 1000th star!               | [[https://github.com/rashly][rashly]]          |
+| 2000th star!!              | [[https://github.com/stshine][stshine]]         |
+| 3000th star!!!             | [[https://github.com/TheBB][TheBB]]           |
+| 4000th star!!!!            | [[https://github.com/nixmaniack][nixmaniack]]      |
+| 5000th star!!!!!           | [[https://github.com/StreakyCobra][StreakyCobra]]    |
+| 6000th star!!!!!!          | [[https://github.com/NJBS][NJBS]]            |
+| 7000th star!!!!!!!         | [[https://github.com/mukhali][mukhali]]         |
+| 8000th star!!!!!!!!        | [[https://github.com/shsteven][shsteven]]        |
+| 9000th star!!!!!!!!!       | [[https://github.com/deb0ch][deb0ch]]          |
+| 10000th star :star:        | [[https://github.com/colt365][colt365]]         |
+| 15000th star :star: :star: | [[https://github.com/missingfaktor][missingfaktor]]   |
 
 ** Gitter chat
 
@@ -3386,19 +3400,20 @@ with ~SPC SPC spacemacs/recompile-elpa~.
 
 ** Special Titles
 
-| Achievements                                    | Account      |
-|-------------------------------------------------+--------------|
-| The Gunner (18 PRs in a row)                    | [[https://github.com/ralesi][ralesi]]       |
-| The Saint (unlocked the holy-mode)              | [[https://github.com/trishume][trishume]]     |
-| The Artist ([[https://github.com/nashamri/spacemacs-logo][logo]] and [[https://github.com/nashamri/spacemacs-theme][theme]])                     | [[https://github.com/nashamri][nashamri]]     |
-| The Meme Master (doge banner)                   | [[https://github.com/chrisbarrett][chrisbarrett]] |
-| The Helm captain ([[https://tuhdo.github.io/helm-intro.html][helm guide]])                   | [[https://github.com/tuhdo][tuhdo]]        |
-| The Master of the Keys ([[https://github.com/justbur/emacs-which-key][which-key]] and [[https://github.com/justbur/emacs-bind-map][bind-map]]) | [[https://github.com/justbur][justbur]]      |
-| The PR Patrol Officer                           | [[https://github.com/robbyoconnor][robbyoconnor]] |
-| The Expert in Latin Language ([[https://github.com/syl20bnr/spacemacs/pull/4043][PR]])               | [[https://github.com/vijaykiran][vijaykiran]]   |
-| The Tiler ([[https://github.com/syl20bnr/spacemacs/pull/4068][eyebrowse integration]])               | [[https://github.com/bmag][bmag]]         |
-| The Geometer ([[https://github.com/TheBB/spaceline][spaceline]])                        | [[https://github.com/TheBB][TheBB]]        |
-| The Librarian (doc-fmt tool and space-doc mode) | [[https://github.com/JAremko][JAremko]]      |
+| Achievements                                    | Account       |
+|-------------------------------------------------+---------------|
+| The Gunner (18 PRs in a row)                    | [[https://github.com/ralesi][ralesi]]        |
+| The Saint (unlocked the holy-mode)              | [[https://github.com/trishume][trishume]]      |
+| The Artist ([[https://github.com/nashamri/spacemacs-logo][logo]] and [[https://github.com/nashamri/spacemacs-theme][theme]])                     | [[https://github.com/nashamri][nashamri]]      |
+| The Meme Master (doge banner)                   | [[https://github.com/chrisbarrett][chrisbarrett]]  |
+| The Helm captain ([[https://tuhdo.github.io/helm-intro.html][helm guide]])                   | [[https://github.com/tuhdo][tuhdo]]         |
+| The Master of the Keys ([[https://github.com/justbur/emacs-which-key][which-key]] and [[https://github.com/justbur/emacs-bind-map][bind-map]]) | [[https://github.com/justbur][justbur]]       |
+| The PR Patrol Officer                           | [[https://github.com/robbyoconnor][robbyoconnor]]  |
+| The Expert in Latin Language ([[https://github.com/syl20bnr/spacemacs/pull/4043][PR]])               | [[https://github.com/vijaykiran][vijaykiran]]    |
+| The Tiler ([[https://github.com/syl20bnr/spacemacs/pull/4068][eyebrowse integration]])               | [[https://github.com/bmag][bmag]]          |
+| The Geometer ([[https://github.com/TheBB/spaceline][spaceline]])                        | [[https://github.com/TheBB][TheBB]]         |
+| The Librarian (doc-fmt tool and space-doc mode) | [[https://github.com/JAremko][JAremko]]       |
+| The Orgonaut ([[https://github.com/syl20bnr/spacemacs/issues/9476][fixed most of the Org READMEs]])    | [[https://github.com/smile13241324][smile13241324]] |
 
 * Thank you
 Thank you Richard for this great piece of software.

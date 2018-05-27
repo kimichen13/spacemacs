@@ -93,10 +93,11 @@
 
 (defun org/init-org ()
   (use-package org
-    :defer t
+    :defer (spacemacs/defer)
     :commands (orgtbl-mode)
     :init
     (progn
+      (spacemacs|require 'org)
       (setq org-clock-persist-file (concat spacemacs-cache-directory
                                            "org-clock-save.el")
             org-id-locations-file (concat spacemacs-cache-directory
@@ -188,6 +189,7 @@ Will work on both org-mode and any mode that accepts plain html."
 
         "a" 'org-agenda
 
+        "Tc" 'org-toggle-checkbox
         "Te" 'org-toggle-pretty-entities
         "Ti" 'org-toggle-inline-images
         "Tl" 'org-toggle-link-display
@@ -291,6 +293,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "iH" 'org-insert-heading-after-current
         "iK" 'spacemacs/insert-keybinding-org
         "il" 'org-insert-link
+        "in" 'org-add-note
         "ip" 'org-set-property
         "is" 'org-insert-subheading
         "it" 'org-set-tags
@@ -315,6 +318,7 @@ Will work on both org-mode and any mode that accepts plain html."
         "aoa" 'org-agenda-list
         "aoc" 'org-capture
         "aoe" 'org-store-agenda-views
+        "aokg" 'org-clock-goto
         "aoki" 'org-clock-in-last
         "aokj" 'org-clock-jump-to-current-clock
         "aoko" 'org-clock-out
