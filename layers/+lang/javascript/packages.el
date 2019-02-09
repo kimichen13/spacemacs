@@ -24,14 +24,11 @@
         js2-mode
         js2-refactor
         livid-mode
-        (lsp-javascript-typescript
-         :requires lsp-mode
-         :location (recipe :fetcher github
-                           :repo "emacs-lsp/lsp-javascript"))
+        org
+        prettier-js
         skewer-mode
         tern
         web-beautify
-        yasnippet
         ))
 
 (defun javascript/post-init-add-node-modules-path ()
@@ -64,6 +61,10 @@
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode
     "i" 'spacemacs/impatient-mode))
 
+(defun javascript/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(js . t))))
+
 (defun javascript/init-js-doc ()
   (use-package js-doc
     :defer t
@@ -72,11 +73,10 @@
 (defun javascript/init-js2-mode ()
   (use-package js2-mode
     :defer t
-    :mode "\\.m?js\\'"
+    :mode (("\\.m?js\\'"  . js2-mode))
     :init
     (progn
-      (add-hook 'js2-mode-local-vars-hook
-                #'spacemacs//javascript-setup-backend)
+      (add-hook 'js2-mode-local-vars-hook #'spacemacs//javascript-setup-backend)
       ;; safe values for backend to be used in directory file variables
       (dolist (value '(lsp tern))
         (add-to-list 'safe-local-variable-values
@@ -164,11 +164,9 @@
         :evil-leader-for-mode (js2-mode . "Tl"))
       (spacemacs|diminish livid-mode " 🅻" " [l]"))))
 
-(defun javascript/init-lsp-javascript-typescript ()
-  (use-package lsp-javascript-typescript
-    :commands lsp-javascript-typescript-enable
-    :defer t
-    :config (require 'lsp-javascript-flow)))
+(defun javascript/pre-init-prettier-js ()
+  (if (eq javascript-fmt-tool 'prettier)
+      (add-to-list 'spacemacs--prettier-modes 'js2-mode)))
 
 (defun javascript/init-skewer-mode ()
   (use-package skewer-mode
@@ -201,9 +199,6 @@
   (add-to-list 'tern--key-bindings-modes 'js2-mode))
 
 (defun javascript/pre-init-web-beautify ()
-  (add-to-list 'spacemacs--web-beautify-modes (cons 'js2-mode 'web-beautify-js)))
-
-(defun javascript/pre-init-yasnippet ()
-  (spacemacs|use-package-add-hook yasnippet
-    :post-config
-    (yas-activate-extra-mode 'js-mode)))
+  (if (eq javascript-fmt-tool 'web-beautify)
+      (add-to-list 'spacemacs--web-beautify-modes
+                   (cons 'js2-mode 'web-beautify-js))))

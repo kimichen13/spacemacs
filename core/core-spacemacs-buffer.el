@@ -133,7 +133,7 @@ Cate special text banner can de reachable via `998', `cat' or `random*'.
 (defun spacemacs-buffer/display-startup-note ()
   "Decide of the startup note and display it if relevant."
   (when (file-exists-p spacemacs-buffer--cache-file)
-    (load spacemacs-buffer--cache-file))
+    (load spacemacs-buffer--cache-file nil (not init-file-debug)))
   (cond
    (spacemacs-buffer--fresh-install
     ;; we assume the user is  new to spacemacs and open the quickhelp
@@ -226,7 +226,10 @@ Insert it in the first line of the buffer, right justified."
         (goto-char (point-min))
         (delete-region (point) (progn (end-of-line) (point)))
         (insert (format (format "%%%ds"
-                                spacemacs-buffer--window-width)
+                                (if (display-graphic-p)
+                                    spacemacs-buffer--window-width
+                                  ;; terminal needs one less char
+                                  (1- spacemacs-buffer--window-width)))
                         version))))))
 
 (defun spacemacs-buffer//insert-footer ()
@@ -570,28 +573,6 @@ If MESSAGEBUF is not nil then MSG is also written in message buffer."
       (insert msg)
       (when messagebuf
         (message "(Spacemacs) %s" msg)))))
-
-(defun spacemacs-buffer/loading-animation ()
-  "Display the progress bar by chunks of size `spacemacs--loading-dots-chunk-threshold'."
-  (when (and (not noninteractive)
-             dotspacemacs-loading-progress-bar)
-    (setq spacemacs-loading-counter (1+ spacemacs-loading-counter))
-    (setq spacemacs-loading-value (1+ spacemacs-loading-value))
-    (when (>= spacemacs-loading-counter spacemacs-loading-dots-chunk-threshold)
-      (let ((suffix (format "> %s/%s" spacemacs-loading-value
-                            (length configuration-layer--used-packages))))
-        (setq spacemacs-loading-counter 0)
-        (setq spacemacs-loading-string
-              (make-string
-               (max 0
-                    (- (* spacemacs-loading-dots-chunk-size
-                          (floor (/ spacemacs-loading-value
-                                    spacemacs-loading-dots-chunk-threshold)))
-                       (length suffix)))
-               spacemacs-loading-char))
-        (spacemacs-buffer/set-mode-line
-         (concat spacemacs-loading-string suffix)))
-      (spacemacs//redisplay))))
 
 (defmacro spacemacs-buffer||add-shortcut
     (shortcut-char search-label &optional no-next-line)
@@ -997,7 +978,8 @@ SEQ, START and END are the same arguments as for `cl-subseq'"
   (with-current-buffer spacemacs-buffer-name
     (goto-char (point-min))
     (with-demoted-errors "spacemacs buffer error: %s"
-      (widget-forward 1))))
+      (search-forward "[")
+      (left-char 2))))
 
 (defun spacemacs-buffer//startup-hook ()
   "Code executed when Emacs has finished loading."
